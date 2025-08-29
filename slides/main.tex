@@ -1,0 +1,83 @@
+%Use one of the two documentclass lines depending on aspect ratio needed
+% for 4x3 aspect ratio slides
+%\documentclass{beamer}
+%for 16x9 (modern wide screen) aspect ratio slides
+\documentclass[aspectratio=169,10pt]{beamer}
+
+% Oxford Maths theming
+\usetheme{oxfordmaths}
+\input{p-and-m}
+\usepackage{stmaryrd} 
+
+% PRESENTATION INFO
+
+\author[U. Zerbinati]{Umberto Zerbinati*} %ADD CO-AUTHORS IF NEEDED
+\institute{*Mathematical Institute -- University of Oxford}
+
+\title[Embedded Trefftz Maxwell]{
+Embedded Trefftz Discretisations for the Maxwell
+Eigenvalue Problem with Applications to MHD}
+\date[Heidelberg, 1st Sep. '25]{ENUMATH, 1st September 2025} %[short for footer]{INSERT CONFERENCE NAME, full date for titlepage}
+
+
+\begin{document}
+% Setting colors for tcolorbox 
+\tcbset{colframe=base02,colback=base2,coltext=base03,coltitle=base3}
+
+\begin{frame}[plain,noframenumbering]
+  \titlepage
+\end{frame}
+
+\begin{frame}
+    \frametitle{Trefftz Methods}
+    $\newline$
+    The idea behind DG-Trefftz methods is to consider a discontinuous Galerkin method where the local approximation spaces are made of functions that are piecewise solutions of the target PDE.
+    For example, let us consider the Laplace equation,
+    \begin{equation}
+        -\Delta u = 0 \quad \text{in } \Omega,  \quad u = g \quad \text{on } \partial \Omega.
+    \end{equation} 
+    \visible<2->{
+        A DG-Trefftz method for this problem would consider a mesh $\mathcal{T}_h$ of $\Omega$ and a local discrete space
+        \begin{equation}
+            \mathbb{T}^p(K) = \{ v \in \mathbb{P}^p(K) : \Delta v = 0 \text{ in } K \}, \quad \forall K \in \mathcal{T}_h,
+        \end{equation}
+        where $\mathbb{P}^p(K)$ is the space of polynomials of degree at most $p$ on the element $K$.
+    }
+    \visible<3->{
+        The global discrete space is then defined as
+        \begin{equation}
+            \mathbb{T}_h = \{ v_h \in L^2(\Omega) : v_h|_K \in \mathbb{T}^p(K), \forall K \in \mathcal{T}_h \}. 
+        \end{equation}
+    }
+\end{frame}
+\begin{frame}
+    \textbf{No conformity} is imposed across element interfaces in the space $\mathbb{T}_h$, hence a DG formulation is needed to enforce the continuity of the solution.
+    We thus consider the following DG formulation: find $u_h \in \mathbb{T}_h$ such that
+    \begin{align}
+        \int_{\mathcal{T}_h} \nabla u_h \cdot \nabla v_h \, dx &\!-\! \int_{\mathcal{F}_{h}} (\llbracket u_h \rrbracket \cdot \{\nabla v_h\} \!+\! \llbracket v_h \rrbracket \cdot \{\nabla u_h\}) \, ds \!+\! \int_{\mathcal{F}_h} \frac{\sigma p^2}{h} \llbracket u_h \rrbracket \cdot \llbracket v_h \rrbracket \, ds \!=\! \!-\!\int_{\partial \Omega} g (\partial_{n} v_h) \, ds,\\
+        & - \int_{\partial \mathcal{T}_h} (u_h \partial_n v_h + v_h \partial_n u_h) \, ds + \int_{\partial \mathcal{T}_h} \frac{\sigma p^2}{h} u_h v_h \, ds,
+    \end{align}
+    for all $v_h \in \mathbb{T}_h$, where $\mathcal{F}_h$ is the set of all faces in the mesh $\mathcal{T}_h$, $\sigma$ is a positive penalty parameter, and $h$ is the mesh size
+\end{frame}
+\begin{frame}
+    \frametitle{An Eigenvalue Problem}
+    $\newline$
+    Since we have assembled the stiffness matrix, we can also assemble the mass matrix and consider the following eigenvalue problem: find $(\lambda_h, u_h) \in \mathbb{R} \times \mathbb{T}_h$ such that
+    \begin{align}
+        \int_{\mathcal{T}_h} \nabla u_h \cdot \nabla v_h \, dx &\!-\! \int_{\mathcal{F}_{h}} (\llbracket u_h \rrbracket \cdot \{\nabla v_h\} \!+\! \llbracket v_h \rrbracket \cdot \{\nabla u_h\}) \, ds \!+\! \int_{\mathcal{F}_h} \frac{\sigma p^2}{h} \llbracket u_h \rrbracket \cdot \llbracket v_h \rrbracket \, ds \\
+        & - \int_{\partial \mathcal{T}_h} (u_h \partial_n v_h + v_h \partial_n u_h) \, ds + \int_{\partial \mathcal{T}_h} \frac{\sigma p^2}{h} u_h v_h \, ds = \lambda_h \int_{\mathcal{T}_h} u_h v_h \, dx,
+    \end{align}
+    for all $v_h \in \mathbb{T}_h$. The mass matrix is the standard DG mass matrix, i.e. $\int_{\mathcal{T}_h} u_h v_h \, dx$.
+    \begin{itemize}
+        \item[$\color{oxfordblue}\blacktriangleright$]<2-> The mass matrix $\underline{\underline{M}}$ only need to be the DG mass matrix, since conformity is already imposed in the stiffness matrix.
+        \item[$\color{oxfordblue}\blacktriangleright$]<3-> The stiffness matrix is parameter dependent, i.e. $\underline{\underline{K}} = \underline{\underline{K}}_1 + \sigma \underline{\underline{K}}_2$.
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \frametitle{Parameter dependence}
+    $\newline$
+    \begin{itemize}
+        \item [$\color{oxfordblue}\blacktriangleright$]<1-> The parameter $\sigma$ has to be chosen sufficiently large to ensure positive definiteness of the stiffness matrix $\underline{\underline{K}}$.
+    \end{itemize}
+\end{frame}
+\end{document}

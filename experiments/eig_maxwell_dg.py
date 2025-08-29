@@ -22,6 +22,8 @@ def MaxwellDG(fes):
     jump_v = v - v.Other()
     jump_p= p - p.Other()
     jump_q= q - q.Other()
+    jump_pn= (p - p.Other())*n
+    jump_qn= (q - q.Other())*n
     mean_rotu = 0.5*(rot(u)+rot(u.Other()))
     mean_rotv = 0.5*(rot(v)+rot(u.Other()))
     jump_ut = (u - u.Other())*t
@@ -43,8 +45,8 @@ def MaxwellDG(fes):
     #a += (u * grad(q) + v * grad(p)) * dx
     a += (-div(u) * q - div(v) * p) * dx
     a += (mean_p * jump_v + mean_q * jump_u) * dx(skeleton=True)
-    a += alpha* k**2 / h *(p *q) * ds(skeleton=True)
-    a.Assemble()
+    #a += -1*k**2/h * jump_p*jump_q*dx(skeleton=True) #Ilaria's term
+    a += alpha* k**2 / (h**2) *(p *q) * ds(skeleton=True)
 
     m = BilinearForm(fes)
     m += -1*u*v*dx
@@ -63,15 +65,26 @@ fes = V * Q
 
 a, m = MaxwellDG(fes)
 from ngsPETSc import EigenSolver
-solver = EigenSolver((m, a), fes, 10,
-                     solverParameters={
-                        "eps_type":"krylovschur",
-                        "st_type":"sinvert",
-                        "eps_target": 1,
-                        "eps_monitor": "",
-                        "st_pc_type": "lu",
-                        "st_pc_factor_mat_solver_type": "mumps"
-                    })
+LU = {  "eps_type":"krylovschur",
+        "st_type":"sinvert",
+        "eps_target": 1,
+        "eps_monitor": "",
+        "st_pc_type": "lu",
+        "st_pc_factor_mat_solver_type": "mumps"}
+
+fieldSplit = {"eps_type":"krylovschur",
+        "st_type":"sinvert",
+        "eps_target": 1,
+        "eps_monitor": "",
+        "st_pc_fieldsplit_detect_saddle_point": "",
+        "st_pc_type": "fieldsplit",
+        "st_pc_fieldsplit_type": "schur",
+        "st_pc_fieldsplit_schur_fact_type": "diag",
+        "st_fieldsplit_0_pc_type": "lu",
+        "st_fieldsplit_0_pc_factor_mat_solver_type": "mumps",
+        "st_fieldsplit_1_ksp_type": "none",
+        "st_fieldsplit_1_pc_type": "none"}
+solver = EigenSolver((m, a), fes, 10, solverParameters=LU)
 solver.solve()
 for i in range(solver.nconv):
    print("Normalised (by pi^2) Eigenvalue ", i, " = ", solver.eigenValue(i))

@@ -1,0 +1,105 @@
+% Packages
+\usepackage{amsmath,amssymb,amsfonts,amscd}
+\usepackage{booktabs} %better lines in tabular
+\usepackage{tcolorbox}
+\usepackage{enumerate,enumitem}
+\usepackage{nicematrix}
+\usepackage{tikz,graphicx}
+\usepackage{tikzit}
+\input{main.tikzstyles}
+\usetikzlibrary{shapes,tikzmark,matrix}
+\tikzset{every tikzmarknode/.style={%
+        draw=red, semithick, inner sep=2pt}
+        }
+\usetikzlibrary{positioning, arrows.meta}
+\usetikzlibrary{3d,perspective}
+\tikzset
+{
+  axis/.style={thick,-latex},
+  my view/.style={3d view={65}{20}},
+  nutation/.style={rotate around x=\nut}
+}
+\usepackage{pgfplots}
+\pgfplotsset{compat = newest}
+\usetikzlibrary{intersections, pgfplots.fillbetween}
+\ifpdf
+  \DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg}
+\else
+  \DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage{fontawesome5}
+\newcommand{\myframesubtitle}[1]{\framesubtitle{{\tiny \faChevronRight} #1}}
+
+
+\newenvironment{refbox}
+    { \begin{tcolorbox}[colframe=base1,colback=base3] 
+        \begin{columns}
+            \begin{column}[t]{0.01\textwidth}
+                \centering
+                \vspace{-0.4cm}
+                { \faBookmark}
+            \end{column}
+            \begin{column}[t]{0.99\textwidth}
+                \hspace{-0.4cm}
+                \footnotesize}
+                {
+            \end{column}
+        \end{columns}
+    \end{tcolorbox}
+    }
+\usepackage{wasysym}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MACROS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{mathtools}
+\mathtoolsset{showonlyrefs}
+\usepackage{todonotes}
+\makeatletter
+\newcommand{\mat}[1]{{\mathpalette\mat@{#1}}}
+\newcommand{\mat@}[2]{%
+  \begingroup
+  \sbox\z@{$\m@th#1\underline{#2}$}%
+  \dimen@=\dp\z@ \advance\dimen@ -2\mat@dimen{#1}%
+  \dp\z@=\dimen@
+  \sbox\z@{$\m@th\underline{\box\z@}$}%
+  \box\z@
+  \endgroup
+}
+\newcommand\mat@dimen[1]{%
+  \fontdimen8
+  \ifx#1\displaystyle\textfont\else
+  \ifx#1\textstyle\textfont\else
+  \ifx#1\scriptstyle\scriptfont\else
+  \scriptscriptfont\fi\fi\fi 3
+}
+\newcommand{\tensor}[1]{{\mathpalette\tensor@{#1}}}
+\newcommand{\tensor@}[2]{%
+  \begingroup
+  \sbox\z@{$\m@th#1\underline{#2}$}%
+  \dimen@=\dp\z@ \advance\dimen@ -2\tensor@dimen{#1}%
+  \dp\z@=\dimen@
+  \sbox\z@{$\m@th\underline{\box\z@}$}%
+  \box\z@
+  \endgroup
+}
+\newcommand\tensor@dimen[1]{%
+  \fontdimen8
+  \ifx#1\displaystyle\textfont\else
+  \ifx#1\textstyle\textfont\else
+  \ifx#1\scriptstyle\scriptfont\else
+  \scriptscriptfont\fi\fi\fi 3
+}
+\def\contraction{\vbox{\baselineskip2.5\p@ \lineskiplimit\z@
+  \kern\p@\hbox{.}\hbox{.}\hbox{.}\hbox{.}}}
+\makeatother
+\newcommand{\duality}[4]{\prescript{}{#1}{\Big\langle} #2 , #3 \Big\rangle_{#4}}
+\newcommand{\interp}{\newpage}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\cchevrons}[1]{\langle\!\langle #1 \rangle\!\rangle}
+\newcommand{\ohat}[1]{\overset{\circ}{#1}}
+\renewcommand{\v}{\vec{\text{v}}}
+\DeclareMathOperator{\tr}{tr}
+\let \vec \underline
+\let \pt \mathbf

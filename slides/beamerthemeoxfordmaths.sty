@@ -1,0 +1,199 @@
+%% Mathematical Institute, University of Oxford
+%% LaTeX Beamer Presentation Theme
+%%
+%% v1.0 Original theme: Tim Hosgood 2015 (based on department PowerPoint Template)
+%% v2.0 Reimplementation: Karl Welzel May 2024 (reimplementation from a standard theme)
+%% v2.1 Further adjustments and tweaks: Keith Gillow May 2024
+
+% Use infolines as base
+\useoutertheme{infolines} 
+% tweak colours for Oxford Blue
+\definecolor{oxfordblue}{RGB}{0,43,54}%{0,33,71}
+
+% COLOR PALETTE - Solarized
+\definecolor{base03}{RGB}{0, 43, 54}
+\definecolor{base02}{RGB}{7, 54, 66}
+\definecolor{base01}{RGB}{88, 110, 117}
+\definecolor{base00}{RGB}{101, 123, 131}
+\definecolor{base0}{RGB}{131, 148, 150}
+\definecolor{base1}{RGB}{147, 161, 161}
+\definecolor{base2}{RGB}{238, 232, 213}
+\definecolor{base3}{RGB}{253, 246, 227}
+\definecolor{yellow}{RGB}{181, 137, 0}
+\definecolor{orange}{RGB}{203, 75, 22}
+\definecolor{red}{RGB}{220, 50, 47}
+\definecolor{magenta}{RGB}{211, 54, 130}
+\definecolor{violet}{RGB}{108, 113, 196}
+\definecolor{blue}{RGB}{38, 139, 210}
+\definecolor{cyan}{RGB}{42, 161, 152}
+\definecolor{green}{RGB}{133, 153, 0}
+
+\usecolortheme[named=oxfordblue]{structure}
+
+% Apply the new color scheme to Beamer elements
+\setbeamercolor{structure}{fg=oxfordblue} % For structural elements like section headers
+\setbeamercolor{frametitle}{bg=base3, fg=base03} % Frame title
+\setbeamercolor{framesubtitle}{bg=base3, fg=base02} % Frame subtitle
+\setbeamercolor{date}{fg=base01} % Date text color
+\setbeamercolor{normal text}{fg=base02} % Default text color
+\setbeamercolor{background canvas}{bg=base3} % Background color
+\setbeamercolor{title in head/foot}{fg=base1} % Title in footer
+\setbeamercolor{section in head/foot}{bg=base03, fg=base3} % Section in footer
+\setbeamercolor{author in head/foot}{fg=base1} % Author in footer
+\setbeamercolor{date in head/foot}{fg=base1} % Date in footer
+\setbeamercolor{page number in head/foot}{fg=base1}
+
+%turn off the navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+
+% define useful layout lengths
+\newlength{\textmargin}
+\setlength{\textmargin}{10mm} % Left and right margin for main content
+\setbeamersize{text margin left=\textmargin,text margin right=\textmargin}
+\newlength{\titlehmargin}
+\setlength{\titlehmargin}{5mm} % Left and right margin for title and footline
+\newlength{\titlevmargin}
+\setlength{\titlevmargin}{1mm} % Top and bottom margin for title and footline
+\newlength{\fullpagewidth}
+\setlength{\fullpagewidth}{\dimexpr\textwidth+\textmargin+\textmargin\relax}
+
+% Calculate widths from heights for the logos
+\newlength{\oxfordlogowidth}
+\setlength{\oxfordlogowidth}{\dimexpr  10mm * 150 / 311 \relax}
+\newlength{\mathslogowidth}
+\setlength{\mathslogowidth}{\dimexpr 3mm * 347 / 105 \relax}
+
+%% Table of Content formating %%
+\setbeamertemplate{section in toc}
+    {\leavevmode\leftskip=2ex%
+        \llap{%
+            \usebeamerfont*{section number projected}%
+            \usebeamercolor{section number projected}%
+            \begin{pgfpicture}{-1ex}{0ex}{1ex}{2ex}
+                \usebeamercolor[fg]{normal text}
+                \pgfpathcircle{\pgfpoint{0pt}{.75ex}}{1.7ex}
+                \pgfusepath{fill}
+                \pgftext[base]{\usebeamercolor[bg]{background canvas}\inserttocsectionnumber}
+            \end{pgfpicture}
+            \kern3ex%
+        }%
+        \inserttocsection\par
+    }
+
+%% Title slide formatting %%
+\setbeamertemplate{title page}{
+  \begin{picture}(0,0)
+        \put(-\textmargin, \dimexpr -\paperheight*6/10 \relax){%
+        \ifdim\paperwidth>400pt
+           \includegraphics[width=\paperwidth]{title-slide-background-wide.png}
+        \else
+           \includegraphics[width=\paperwidth]{title-slide-background.png}
+        \fi
+        }
+        \put(-\textmargin +7mm, -90pt){%
+            \begin{minipage}[b][4.5cm][t]{0.7\textwidth}
+                \raggedright
+                \color{white}
+                \usebeamerfont{title}
+                    \vspace{-1cm}
+                    {\inserttitle\\[0.9cm]}
+                \usebeamerfont{subtitle}
+                    {\insertauthor\\[0.3cm]}
+                    {{\small\it\insertinstitute}\\[0.3cm]}
+                    {\insertdate}
+            \end{minipage}
+        }
+    \end{picture}
+}
+
+%% General slide header %%
+\setbeamertemplate{frametitle}{%
+   \rlap{%
+     \begin{beamercolorbox}[sep=\titlevmargin,left,wd=\dimexpr\fullpagewidth-\titlehmargin*2+\titlevmargin*2\relax]{frametitle}%
+      \begin{minipage}{\dimexpr\fullpagewidth-\oxfordlogowidth-\titlehmargin*3-0.1cm\relax}%
+        \strut{\small \textbf{\MakeUppercase \insertframetitle}} {\small \hspace{0.1cm}\textit{\usebeamercolor[fg]{framesubtitle} \insertframesubtitle}}\strut\par%
+      \end{minipage}%
+      \hspace{\titlehmargin}%
+      \begin{minipage}{\dimexpr\oxfordlogowidth+1mm\relax}%
+        \hfill
+        \vspace*{-4mm}
+        \includegraphics[width=\oxfordlogowidth]{oxford-logo.png}%
+      \end{minipage}%
+     \end{beamercolorbox}%
+   }%
+   \vspace{\dimexpr-\baselineskip+1ex\relax}%
+   \noindent\rlap{\hspace{-\textmargin}\hspace{\titlehmargin}\rule{\dimexpr\fullpagewidth-\titlehmargin*2\relax}{0.8pt}}%
+   \vspace{-0.6ex}%
+}
+
+%% General slide footer %%
+\setbeamertemplate{footline}{%
+  \noindent\hspace{\titlehmargin}\rule{\dimexpr\fullpagewidth-\titlehmargin*2\relax}{0.4pt}\par%
+  \vspace{\titlevmargin}%
+  \leavevmode%
+  \noindent\hspace{\dimexpr\titlehmargin-\titlevmargin\relax}%
+  \begin{beamercolorbox}[sep=\titlevmargin,wd=\dimexpr\fullpagewidth-\titlehmargin*2+\titlevmargin*2\relax]{footline}%
+    \begin{minipage}{\dimexpr\mathslogowidth+1pt\relax}%
+      \includegraphics[width=\mathslogowidth]{mathematics-logo.png}%
+    \end{minipage}%
+    \hfill%
+    {\usebeamercolor[fg]{author in head/foot}\usebeamerfont{author in head/foot}\insertshortauthor{}}%
+    \hfill%
+    {\usebeamercolor[fg]{title in head/foot}\usebeamerfont{title in head/foot}\insertshorttitle}%
+    \hfill%
+    {\usebeamercolor[fg]{date in head/foot}\usebeamerfont{date in head/foot}\insertshortdate{}}%
+    \hfill%
+    {\usebeamercolor[fg]{page number in head/foot}\usebeamerfont{page number in head/foot}\usebeamertemplate{page number in head/foot}}%
+  \end{beamercolorbox}
+  \vspace{\titlevmargin}%
+}
+
+% Section Page
+\AtBeginSection[]{
+    \setbeamercolor{normal text}{fg=base2} % Default text color
+    \setbeamercolor{background canvas}{bg=base03} % Background color
+        \begin{frame}[plain,noframenumbering]
+            \vfill
+            \centering
+            {\usebeamercolor[fg]{normal text}
+                \textbf{\Large \MakeUppercase \insertsectionhead}\par%
+                \vspace{0.2cm}
+                \noindent\rule{5cm}{1.5pt} \\
+                \vspace{0.5cm}
+                {\Large \begin{pgfpicture}{-1ex}{0ex}{1ex}{2ex}
+      
+      \usebeamercolor[fg]{normal text}
+      \pgfpathcircle{\pgfpoint{0pt}{.75ex}}{1.7ex}
+      \pgfusepath{fill}
+      \pgftext[base]{\usebeamercolor[bg]{background canvas}\insertsectionnumber}
+    \end{pgfpicture} }
+            }    
+            \vfill
+        \end{frame}
+    \setbeamercolor{normal text}{fg=base02} % Default text color
+    \setbeamercolor{background canvas}{bg=base3} % Background color
+}
+
+
+% Thank you page
+% Define the thank you page
+\AtEndDocument{
+    \setbeamercolor{normal text}{fg=base2} % Default text color
+    \setbeamercolor{background canvas}{bg=base03} % Background color
+    \begin{frame}[plain,noframenumbering]
+        \vfill
+        \begin{center}
+        
+          {\usebeamercolor[fg]{normal text}
+          \textbf{\Large \MakeUppercase{Thank You!}}\par%
+          \vspace{0.2cm}
+          \noindent\rule{5cm}{1.5pt} \\
+          \vspace{0.5cm}
+          \inserttitle \\[3ex] 
+          {\sc\insertauthor\\[0.3cm]}
+          }    
+        \end{center}
+          \vfill
+    \end{frame}
+}
